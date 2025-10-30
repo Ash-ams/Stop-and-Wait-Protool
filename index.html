@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Stop-and-Wait ARQ Simulation</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Stop-and-Wait ARQ Protocol Simulation</h1>
+
+  <div class="controls">
+    <div class="row">
+      <button id="start-noiseless-btn">Start Noiseless</button>
+      <button id="start-noisy-btn">Start Noisy</button>
+      <button id="pause-btn">Pause</button>
+      <button id="reset-btn">Reset</button>
+      <button id="next-step-btn" disabled>Next Step ▶</button>
+      <button id="download-log-btn">Download Log</button>
+    </div>
+  </div>
+
+  <div class="controls-panel">
+    <div class="row">
+      <label>Animation (ms): <input type="number" id="animation-speed" value="1600" min="200" step="100"></label>
+      <label>Frames: <input type="number" id="num-frames" value="5" min="1" step="1"></label>
+      <label>Frame Loss (%): <input type="number" id="frame-loss" value="0" min="0" max="100"></label>
+      <label>ACK Loss (%): <input type="number" id="ack-loss" value="0" min="0" max="100"></label>
+      <label>Timeout Factor: <input type="number" id="timeout-factor" value="2.5" step="0.1" min="0.5"></label>
+    </div>
+
+    <div class="row">
+      <label><input type="checkbox" id="step-mode-checkbox"> Step Mode</label>
+      <label><input type="checkbox" id="dark-mode-checkbox"> Dark Mode 🌙</label>
+      <label><input type="checkbox" id="sound-toggle"> Sound 🔊</label>
+    </div>
+  </div>
+
+  <div class="status-bar">
+    <span id="channel-status">Channel: -</span>
+    <span id="sender-state">Sender: Idle</span>
+    <span id="receiver-state">Receiver: Ready</span>
+    <span id="stat-summary">Sent: 0 | Retrans: 0 | LostF: 0 | LostACK: 0</span>
+    <span id="perf-summary">Performance: -</span>
+  </div>
+
+  <div class="progress-container"><div id="progress-bar"></div></div>
+
+  <div class="diagram-container">
+    <div class="node-row">
+      <div class="node node-A"><h2>Sender (A)</h2><p>Seq: <span id="sender-seq">0</span></p></div>
+      <div class="node node-B"><h2>Receiver (B)</h2><p>Expect: <span id="receiver-seq">0</span></p></div>
+    </div>
+    <div id="line-container"></div>
+    <div id="frame-visualization" class="frame-visualization"></div>
+  </div>
+  
+  <div class="log-container">
+    <div id="log-box" aria-live="polite"></div>
+  </div>
+
+  <!-- Soft sounds (external CDN). If blocked, nothing will crash. -->
+  <audio id="snd-send" src="https://cdn.jsdelivr.net/gh/naptha/tiny-sfx/sounds/pop.mp3" preload="auto"></audio>
+  <audio id="snd-ack" src="https://cdn.jsdelivr.net/gh/naptha/tiny-sfx/sounds/click.mp3" preload="auto"></audio>
+  <audio id="snd-lost" src="https://cdn.jsdelivr.net/gh/naptha/tiny-sfx/sounds/error.mp3" preload="auto"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+:root {
+  --bg: #f8f8f8;
+  --accent: #667eea;
+  --good: #27ae60;
+  --danger: #e74c3c;
+  --text: #232848;
+}
+
+/* Base layout */
+body {
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: var(--text);
+  min-height: 100vh;
+  margin: 0;
+  padding: 24px;
+}
+
+h1 {
+  text-align: center;
+  color: white;
+  text-shadow: 2px 2px 8px #4d478b30;
+  margin-bottom: 22px;
+  letter-spacing: 1px;
+}
+
+/* Controls */
+.controls,
+.controls-panel {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 18px;
+  box-shadow: 0 4px 26px #667eea25;
+  padding: 18px 26px;
+  max-width: 1000px;
+  margin: 0 auto 14px auto;
+  border: 1px solid #ececff84;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+
+button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px #667eea33;
+}
+button:active {
+  transform: scale(0.96);
+}
+#reset-btn {
+  background: linear-gradient(135deg, #f093fb, #f5576c);
+}
+#pause-btn {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+/* Status bar */
+.status-bar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px #667eea22;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.progress-container {
+  width: 90%;
+  max-width: 900px;
+  margin: 10px auto 25px auto;
+  height: 10px;
+  background: #ececff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+#progress-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #38ef7d);
+  transition: width 0.4s;
+}
+
+/* --- Diagram container --- */
+.diagram-container {
+  background: #fff;
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 7px 36px #667eea22;
+  max-width: 1000px;
+  margin: 0 auto 24px auto;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 60vh;
+  transition: all 0.4s ease;
+  --timeline-height: 400px; /* custom var for bar growth */
+}
+
+/* --- Timeline bars --- */
+.diagram-container::before,
+.diagram-container::after {
+  content: "";
+  position: absolute;
+  top: 120px;
+  width: 4px;
+  height: var(--timeline-height);
+  background: linear-gradient(to bottom, #667eea99, #764ba255);
+  border-radius: 2px;
+  z-index: 0;
+  transition: height 0.6s ease;
+  animation: growpulse 0.6s ease-out; /* pulsing glow */
+}
+.diagram-container::before {
+  left: 22%;
+}
+.diagram-container::after {
+  right: 22%;
+}
+
+/* --- Glow pulse animation --- */
+@keyframes growpulse {
+  0% {
+    box-shadow: 0 0 0 rgba(118, 75, 162, 0);
+  }
+  40% {
+    box-shadow: 0 0 12px rgba(118, 75, 162, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(118, 75, 162, 0);
+  }
+}
+
+/* --- Node Row --- */
+.node-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 60px;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 10;
+  border-bottom: 1px solid #ececff;
+}
+
+/* --- Node boxes --- */
+.node {
+  width: 200px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  text-align: center;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 3px 16px #667eea44;
+  transition: transform 0.3s, box-shadow 0.3s;
+  z-index: 5;
+  position: relative;
+}
+.node h2 {
+  margin: 0 0 8px 0;
+}
+.node.active-node {
+  transform: scale(1.1);
+  box-shadow: 0 0 28px 7px #ffe75d80;
+}
+
+/* --- Message Lines --- */
+#line-container {
+  position: relative;
+  margin-top: 60px;
+  width: 100%;
+  min-height: 200px;
+  pointer-events: none;
+  overflow: visible;
+  transition: all 0.4s ease;
+}
+.message-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  pointer-events: none;
+}
+.message-track {
+  position: relative;
+  width: 90%;
+  max-width: 860px;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #ccc 50%, transparent);
+  margin: 0 auto;
+}
+
+/* --- Message boxes --- */
+.frame-box,
+.ack-box {
+  position: absolute;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  color: white;
+  white-space: nowrap;
+  opacity: 0;
+  animation-timing-function: cubic-bezier(0.69, 0, 0.3, 1);
+  box-shadow: 0 4px 16px #667eea33;
+  z-index: 8;
+}
+.frame-box {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  animation: send-frame var(--animation-duration) linear forwards;
+}
+.ack-box {
+  background: linear-gradient(135deg, #20e893, #38ef7d);
+  animation: send-ack var(--animation-duration) linear forwards;
+}
+
+/* --- Animations --- */
+@keyframes send-frame {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(var(--move-x));
+    opacity: 1;
+  }
+}
+@keyframes send-ack {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(calc(-1 * var(--move-x)));
+    opacity: 1;
+  }
+}
+
+/* Lost Frame Indicator */
+.lost-x {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #e74c3c;
+  font-weight: 900;
+  font-size: 2.2em;
+  animation: fadeInOut 1.2s ease;
+  text-shadow: 0 0 8px #ffb6b6;
+}
+
+/* Timeout Label */
+.timeout-label {
+  position: absolute;
+  left: 100px;
+  font-size: 0.95em;
+  color: #f39c12;
+  font-weight: 700;
+  opacity: 0;
+  animation: show-fade 0.6s ease forwards;
+}
+@keyframes show-fade {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeInOut {
+  from {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Log box */
+.log-container {
+  background: #20213d;
+  border-radius: 15px;
+  padding: 14px;
+  max-width: 950px;
+  margin: 0 auto;
+  box-shadow: 0 4px 22px #667eea40;
+}
+#log-box {
+  color: #5affb2;
+  font-family: "Fira Code", monospace;
+  font-size: 1em;
+  line-height: 1.4em;
+  height: 180px;
+  overflow-y: auto;
+}
+.log-entry {
+  border-bottom: 1px dashed #2f2f4f;
+  padding: 3px 0;
+}
+.log-entry.send {
+  color: #4a61ff;
+}
+.log-entry.recv {
+  color: #27ae60;
+}
+.log-entry.ack {
+  color: #20e893;
+}
+.log-entry.lost {
+  color: #e74c3c;
+}
+.log-entry.system {
+  color: #f5f5f5;
+}
